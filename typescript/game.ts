@@ -1,5 +1,5 @@
 
-class Game {
+export class Game {
   players: string[] = [];
   places: number[] = [];
   purses: number[] = [];
