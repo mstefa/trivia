@@ -137,45 +137,33 @@ export class Game {
   };
 
   wasCorrectlyAnswered() {
-    if (this.inPenaltyBox[this.currentPlayer]) {
-      if (this.isGettingOutOfPenaltyBox) {
-        this.logger.log('Answer was correct!!!!');
-        this.purses[this.currentPlayer] += 1;
-        this.logger.log(this.players[this.currentPlayer] + " now has " +
-          this.purses[this.currentPlayer] + " Gold Coins.");
-
-        var winner = this.didPlayerWin();
-        this.currentPlayer += 1;
-        if (this.currentPlayer == this.players.length)
-          this.currentPlayer = 0;
-
-        return winner;
-      } else {
-        this.currentPlayer += 1;
-        if (this.currentPlayer == this.players.length)
-          this.currentPlayer = 0;
-        return true;
-      }
-
-
-
-    } else {
-
-      this.logger.log("Answer was correct!!!!");
-
-      this.purses[this.currentPlayer] += 1;
-      this.logger.log(this.players[this.currentPlayer] + " now has " +
-        this.purses[this.currentPlayer] + " Gold Coins.");
-
-      var winner = this.didPlayerWin();
-
-      this.currentPlayer += 1;
-      if (this.currentPlayer == this.players.length)
-        this.currentPlayer = 0;
-
-      return winner;
+    if (this.inPenaltyBox[this.currentPlayer] && !this.isGettingOutOfPenaltyBox) {
+      this.updateCurrentPlayer();
+      return true;
     }
+
+    this.rewardPlayer();
+
+    var winner = this.didPlayerWin();
+
+    this.updateCurrentPlayer();
+
+    return winner;
+
   };
+
+  private rewardPlayer() {
+    this.logger.log('Answer was correct!!!!');
+    this.purses[this.currentPlayer] += 1;
+    this.logger.log(this.players[this.currentPlayer] + " now has " +
+      this.purses[this.currentPlayer] + " Gold Coins.");
+  }
+
+  private updateCurrentPlayer() {
+    this.currentPlayer += 1;
+    if (this.currentPlayer == this.players.length)
+      this.currentPlayer = 0;
+  }
 
   wrongAnswer() {
     this.logger.log('Question was incorrectly answered');
