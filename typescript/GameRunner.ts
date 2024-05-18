@@ -1,8 +1,19 @@
-import { Game } from "./game";
+import { Game, Logger } from "./game";
 
 var notAWinner = false;
 
-var game = new Game(['Chet', 'Pat', 'Sue']);
+class LoggerConsole implements Logger {
+
+  log(message: string): void {
+    console.log(message)
+  }
+
+}
+
+const logger = new LoggerConsole()
+
+
+var game = new Game(['Chet', 'Pat', 'Sue'], logger);
 
 do {
 
