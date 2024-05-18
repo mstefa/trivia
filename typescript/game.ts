@@ -11,7 +11,20 @@ export class Game {
   currentPlayer: number = 0;
   isGettingOutOfPenaltyBox: boolean = false;
 
-  constructor() {
+  constructor(players: string[]) {
+
+    if (players.length < 2) {
+      throw Error('The minimum number of player is <2>')
+    }
+
+    players.forEach(player => {
+      const playerWasAdded = this.add(player)
+
+      if (!playerWasAdded) {
+        throw Error('Not all players can be added')
+      }
+    })
+
 
     for (var i = 0; i < 50; i++) {
       this.popQuestions.push("Pop Question " + i);
@@ -31,6 +44,12 @@ export class Game {
   };
 
   add(playerName: string) {
+
+    if (this.players.length >= 6) {
+      console.log(playerName + "Can not be added");
+      console.log("The maximum number of players was reach");
+      return false;
+    }
     this.players.push(playerName);
     this.places[this.howManyPlayers() - 1] = 0;
     this.purses[this.howManyPlayers() - 1] = 0;
@@ -55,10 +74,8 @@ export class Game {
         this.isGettingOutOfPenaltyBox = true;
 
         console.log(this.players[this.currentPlayer] + " is getting out of the penalty box");
-        this.places[this.currentPlayer] = this.places[this.currentPlayer] + roll;
-        if (this.places[this.currentPlayer] > 11) {
-          this.places[this.currentPlayer] = this.places[this.currentPlayer] - 12;
-        }
+
+        this.updatePlayerLocation(roll);
 
         console.log(this.players[this.currentPlayer] + "'s new location is " + this.places[this.currentPlayer]);
         console.log("The category is " + this.currentCategory());
@@ -69,16 +86,20 @@ export class Game {
       }
     } else {
 
-      this.places[this.currentPlayer] = this.places[this.currentPlayer] + roll;
-      if (this.places[this.currentPlayer] > 11) {
-        this.places[this.currentPlayer] = this.places[this.currentPlayer] - 12;
-      }
+      this.updatePlayerLocation(roll);
 
       console.log(this.players[this.currentPlayer] + "'s new location is " + this.places[this.currentPlayer]);
       console.log("The category is " + this.currentCategory());
       this.askQuestion();
     }
   };
+
+  private updatePlayerLocation(roll: number) {
+    this.places[this.currentPlayer] = this.places[this.currentPlayer] + roll;
+    if (this.places[this.currentPlayer] > 11) {
+      this.places[this.currentPlayer] = this.places[this.currentPlayer] - 12;
+    }
+  }
 
   askQuestion() {
     if (this.currentCategory() == 'Pop')
@@ -169,25 +190,14 @@ export class Game {
     return !(this.purses[this.currentPlayer] == 6)
   };
 
-}
-
-var notAWinner = false;
-
-var game = new Game();
-
-game.add('Chet');
-game.add('Pat');
-game.add('Sue');
-
-do {
-
-
-  game.roll(Math.floor(Math.random() * 6) + 1);
-
-  if (Math.floor(Math.random() * 10) == 7) {
-    notAWinner = game.wrongAnswer();
-  } else {
-    notAWinner = game.wasCorrectlyAnswered();
+  public isPlayerInPrison(player: string) {
+    const index = this.players.indexOf(player)
+    return this.inPenaltyBox[index]
   }
 
-} while (notAWinner);
+  public getPlayerPosition(player: string) {
+    const index = this.players.indexOf(player)
+    return this.places[index]
+  }
+
+}
