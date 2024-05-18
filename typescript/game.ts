@@ -170,9 +170,7 @@ export class Game {
     this.logger.log(this.players[this.currentPlayer] + " was sent to the penalty box");
     this.inPenaltyBox[this.currentPlayer] = true;
 
-    this.currentPlayer += 1;
-    if (this.currentPlayer == this.players.length)
-      this.currentPlayer = 0;
+    this.updateCurrentPlayer()
     return true;
   };
 
