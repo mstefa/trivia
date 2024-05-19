@@ -1,4 +1,4 @@
-import { Game, Logger } from "./game";
+import { Game, Logger } from "./Game";
 
 var notAWinner = false;
 

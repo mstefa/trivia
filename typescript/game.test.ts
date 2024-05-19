@@ -1,4 +1,4 @@
-import { Game, Logger } from "./game";
+import { Game, Logger } from "./Game";
 
 class MockedLogger implements Logger {
 
@@ -76,23 +76,27 @@ describe("Game Test", () => {
 
   });
 
-  // it("A player that is in prison, can get out when it get an odd roll", () => {
-  //   const player1 = 'John';
-  //   const player2 = 'Alan';
-  //   const players = [player1, player2];
-  //   const game = new Game(players, mockedLogger)
+  it("A player that is in prison, can get out when it get an odd roll", () => {
+    const player1 = 'John';
+    const player2 = 'Alan';
+    const players = [player1, player2];
+    const game = new Game(players, mockedLogger)
 
-  //   game.roll(4)
-  //   game.wrongAnswer();
-  //   game.roll(4) // player2
-  //   game.wasCorrectlyAnswered()
-  //   game.roll(3)
-  //   game.wasCorrectlyAnswered()
+    game.roll(4)
+    game.wrongAnswer();
+    game.roll(4) // player2
+    game.wasCorrectlyAnswered()
+    game.roll(3)
 
-  //   const messages = mockedLogger.getMessages()
+    const messages = mockedLogger.getMessages()
+    expect(messages.at(-4)).toBe(`${player1} is getting out of the penalty box`);
 
-  //   expect(messages.at(-3)).toBe(`${player1} is getting out of the penalty box`);
-  // });
+    game.wasCorrectlyAnswered()
+    game.roll(4) // player2
+    game.wasCorrectlyAnswered()
+    game.roll(2)
+    // expect(messages.at(-3)).toBe(`${player1}'s new location is 9`); //TODO
+  });
 
 
 
